@@ -1,0 +1,7 @@
+streamlit
+deepface
+pyttsx3
+whisper-openai
+speech_recognition
+langchain_goggle_generativeai
+stablelm-zephyr-3b
