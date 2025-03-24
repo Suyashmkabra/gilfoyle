@@ -90,7 +90,6 @@ def main():
     end_idx = min((st.session_state.page_index + 1) * 7, 70)
 
     st.title("Personality Quiz")
-    st.image(r'assets\Virtual-AI-assistant.webp')
 
     # Generate questions for the current page
     selected_options = generate_questions(quesdata=questionData, startIndex=start_idx, endIndex=end_idx)
