@@ -2,11 +2,11 @@ streamlit
 deepface
 pyttsx3
 whisper-openai
-langchain_goggle_generativeai
+langchain-google-genai
 SpeechRecognition
-geimini
+langchain-core
 opencv-python
 webbrowser
 transformers
 langchain
-langchain_community
+langchain-community
