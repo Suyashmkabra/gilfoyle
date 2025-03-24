@@ -9,3 +9,4 @@ opencv-python-headless
 transformers
 langchain
 langchain-community
+tf-keras
