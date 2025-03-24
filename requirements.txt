@@ -6,7 +6,6 @@ langchain-google-genai
 SpeechRecognition
 langchain-core
 opencv-python
-webbrowser
 transformers
 langchain
 langchain-community
