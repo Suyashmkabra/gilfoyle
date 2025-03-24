@@ -4,7 +4,7 @@ from deepface import DeepFace
 # Disable OpenCV optimizations for better compatibility
 cv2.setUseOptimized(False)
 
-def face_emotion_recognition():
+def face_emotion_recogniton():
     # Load pre-trained face classifier
     face_classifier = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 
