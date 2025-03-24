@@ -5,10 +5,14 @@ import pyttsx3
 from fer import face_emotion_recogniton
 import webbrowser
 import os
+from nlp import text_emotion
+from rag import my_vector_store
 
 # speaker for text to speech section
 speaker =None
 
+previous_p=''
+previos_r=''
 
 def init_speaker():
     global speaker
@@ -23,16 +27,25 @@ def Speak(text):
     speaker.stop()
     speaker.endLoop()
 
-# sectio for llm setup for generating reponse
-def run_generate(user_emotion):
+# sectio for llm setup for generating reponse   
+def run_generate(query,user_emotion):
+    vcs=my_vector_store()
+    context=''
     st.text("Generating response...")
-    response_total = generate_response(query,user_emotion=user_emotion)
-    response_given =response_total['text']
+    if not query=='':
+        res=vcs.v_similarity(query=query,k=1)
+        print( res)
+        for resp, score in res:
+            # print('response '+resp)
+            print(score)
+            context=resp.page_content
+    response_total = generate_response(context,query,user_emotion=user_emotion)
+    response_given =response_total
     st.write("Response:", response_given)
     Speak(response_given)
 
 
-st.title("Son of Gilfoyle, CAI assistant")
+st.title("Gilfoyle, CAI assistant")
 
 
 recording = False
@@ -40,7 +53,7 @@ session_state = st.session_state
 if not hasattr(session_state, "user_speech"):
     session_state.user_speech = ""
 
-query=''
+query='Hello, weve started session'
 
 user_emotion_string=''
 close_fr=False
@@ -93,8 +106,10 @@ if session_state.user_speech:
 elif session_state.user_input:
     query=session_state.user_input
 else:
+    print('now in else we are')
     query=''
 print("user query :" + query)
+user_emotion_string=text_emotion(query)[0]['label']
 print("user emotion"+user_emotion_string)
 
 if not query=='':
@@ -113,10 +128,10 @@ if not query=='':
             
         print(query , user_emotion_string)
     else:
-        run_generate(user_emotion=user_emotion_string)
+        run_generate(query,user_emotion=user_emotion_string)
 
 elif not user_emotion_string=='':
-    run_generate(user_emotion=user_emotion_string)
+    run_generate(query,user_emotion=user_emotion_string)
 
 # Generate response
 # if not recording and session_state.user_speech:

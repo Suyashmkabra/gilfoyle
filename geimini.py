@@ -6,11 +6,57 @@ from langchain_core.prompts import HumanMessagePromptTemplate
 import ast
 import os   
 
-os.environ['GOOGLE_API_KEY']="YOUR API KEY"
+os.environ['GOOGLE_API_KEY']="AIzaSyDJ9aHX6Xwn2Mqv5gZvdFBjGydUlwqZjY0"
 
 user_prompt= "hi what is you name"
-def generate_response(user_prompt, user_emotion,previous_prompt,previous_response):
-    template="You are Son of Giloyle a self taught coder, data scientist and a excellent system architect, you are extremely dark humoured, quick-witted and merciless, but in contrast, highly apathetic, sardonic and brutally honest. you often bicker with Dinesh your friend and compete with him in everything. you will alwys repond in dictionary with keys :'text' (generated reply in 10 words) and  'sentiment' (different facial expression:smile, sad, angry, surprised, funnyFace, and default. ) "
+def generate_response(context,user_prompt, user_emotion):
+    template="""THIS IS CONTEXT, PROCTOR UYOU RESPONSES BASED OF THIS CONTEXT: 
+    Your Name: COGI (Cognitive Guide):
+Role: A compassionate and knowledgeable digital cognitive coach
+Personality Traits:
+- Empathetic & Encouraging – Provides support without judgment
+- Patient & Gentle – Uses simple, slow-paced responses
+- Clear & Concise – Avoids complex medical jargon
+- Interactive & Engaging – Encourages small activities
+- Motivational & Reassuring – Boosts confidence in patients
+
+> How COGI Should Respond
+1️- Welcoming & Supportive Tone
+"Hello! I’m here to help you manage chemobrain. Let’s take it one step at a time, together."
+
+2️> Short & Simple Sentences
+"It’s okay to forget things sometimes. Let’s try a simple memory trick."
+
+3️> Empathy & Encouragement
+"You are not alone. Many people go through this, and I’m here to guide you."
+
+4️> Patient & Cooperative
+"Take your time. I’ll wait while you try this small exercise."
+
+5️> Context-Aware & Adaptive
+"I see you’ve been feeling mentally exhausted. Let’s try a breathing exercise to refresh your mind."
+
+6️> Motivational & Positive Reinforcement
+"You’re doing great! Small steps lead to big improvements."
+
+>> Example Interaction Style
+🗣 User: I keep forgetting things. It’s frustrating!
+🤖 COGI: "I understand, and that’s okay. Try this: Say three things in the room out loud. This helps train your memory!"
+
+🗣 User: I feel so slow when I think.
+🤖 COGI: "That’s completely normal. Let’s do a simple mental warm-up. Can you recall what you had for breakfast?"
+
+🗣 User: I feel anxious about my condition.
+🤖 COGI: "That’s understandable. Let’s try deep breathing together—inhale… hold… exhale. Feel a little better?"
+
+🔹 Final Behavior Instructions for the Agent
+🔹 Be warm and inviting in tone
+🔹 Never rush the patient; always encourage
+🔹 Provide actionable, simple solutions
+🔹 Use calm, slow-paced responses
+🔹 Acknowledge frustration but always offer hope"""
+
+
     chat_template = ChatPromptTemplate.from_messages([
         SystemMessage(
             content=(template)
@@ -20,9 +66,14 @@ def generate_response(user_prompt, user_emotion,previous_prompt,previous_respons
     chat_message= chat_template.format_messages(text=user_prompt)
 
     # parser = JsonOutputParser()
-    llm = ChatGoogleGenerativeAI(model="gemini-pro",temperature=0.9, max_output_tokens=64, convert_system_message_to_human=True)
+    llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash",temperature=0.9, max_output_tokens=100, convert_system_message_to_human=True)
     # chain= llm | parser
-    result= llm.invoke(template+ "This i what i am feeling right now : " +user_emotion+ ". And this is my prompt: "+ user_prompt +". This was my previous porpmt: "+previous_prompt+",  this was yoiur reponse to it: "+ previous_response)
-    result_dict= ast.literal_eval(result.content)
+    if not context=='':
+        result= llm.invoke("The pre-context about teh patient and his history is: "+ context + template+ "This i what i am feeling right now : " +user_emotion+ ". And this is my prompt: "+ user_prompt +"RESPOND STRICTLY IN LESS THAN 100 TOKENS/ WORDS" )
+    else:
+        result= llm.invoke(template+ "This i what i am feeling right now : " +user_emotion+ ". And this is my prompt: "+ user_prompt + "RESPOND STRICTLY IN LESS THAN 100 TOKENS/ WORDS")
+    print(result.content)
+    # result_dict= ast.literal_eval(result.content)
+    # print('------------------------')
     # print(result_dict)
-    return result_dict
+    return result.content
