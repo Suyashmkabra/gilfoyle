@@ -1,7 +1,7 @@
 import cv2
 from deepface import DeepFace
 
-
+cv2.setUseOptimized(False)
 def face_emotion_recogniton():
     face_classifier = cv2.CascadeClassifier()
     face_classifier.load(cv2.samples.findFile('haarcascade_frontalface_default.xml'))
