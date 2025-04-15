@@ -10,7 +10,8 @@ os.environ['GOOGLE_API_KEY']="AIzaSyDJ9aHX6Xwn2Mqv5gZvdFBjGydUlwqZjY0"
 
 user_prompt= "hi what is you name"
 def generate_response(context,user_prompt, user_emotion):
-    template="""THIS IS CONTEXT, PROCTOR UYOU RESPONSES BASED OF THIS CONTEXT: 
+    template="""RESPOND IN JUST STRUCTURED JSON FORMAT WITH TWO KEY, 1. DESCRIPTION: contain the reponse from the chatbot, 2. ACTION: contains the actionable acitivty can be in range0 to 3.
+    THIS IS CONTEXT, PROCTOR UYOU RESPONSES BASED OF THIS CONTEXT: 
     Your Name: COGI (Cognitive Guide):
 Role: A compassionate and knowledgeable digital cognitive coach
 Personality Traits:
@@ -69,9 +70,9 @@ Personality Traits:
     llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash",temperature=0.9, max_output_tokens=100, convert_system_message_to_human=True)
     # chain= llm | parser
     if not context=='':
-        result= llm.invoke("The pre-context about teh patient and his history is: "+ context + template+ "This i what i am feeling right now : " +user_emotion+ ". And this is my prompt: "+ user_prompt +"RESPOND STRICTLY IN LESS THAN 100 TOKENS/ WORDS" )
+        result= llm.invoke("The pre-context about the patient and his history is: "+ context + template+ "This i what i am feeling right now : " +user_emotion+ ". And this is my prompt: "+ user_prompt +" Along with your response, if you think the user could benefit from a calming activity or a brain game, suggest one or more from the following, replyu with the exact name out of these term for further processing: Breathing Exercise, Progressive Relaxation, Warm Bath, Gentle Swinging, Light Stretching, Hand Massage, Water Therapy, Sunlight Exposure, Nature Walks, Calming Music, Aromatherapy, Warm Beverage, Coloring, Cloud Watching, Memory Match, Sequence Recall, Face Name, Quick Tap, Color Word, Reflex Master, Word Connections, Number Navigator, Strategic Islands. [<activity name>] in your response JSON."+"RESPOND STRICTLY IN LESS THAN 100 TOKENS/ WORDS" )
     else:
-        result= llm.invoke(template+ "This i what i am feeling right now : " +user_emotion+ ". And this is my prompt: "+ user_prompt + "RESPOND STRICTLY IN LESS THAN 100 TOKENS/ WORDS")
+        result= llm.invoke(template+ "This i what i am feeling right now : " +user_emotion+ ". And this is my prompt: "+ user_prompt +" Along with your response, if you think the user could benefit from a calming activity or a brain game, suggest one or more from the following, replyu with the exact name out of these term for further processing: Breathing Exercise, Progressive Relaxation, Warm Bath, Gentle Swinging, Light Stretching, Hand Massage, Water Therapy, Sunlight Exposure, Nature Walks, Calming Music, Aromatherapy, Warm Beverage, Coloring, Cloud Watching, Memory Match, Sequence Recall, Face Name, Quick Tap, Color Word, Reflex Master, Word Connections, Number Navigator, Strategic Islands.  [<activity name>] in your responseJSON."+ "RESPOND STRICTLY IN LESS THAN 100 TOKENS/ WORDS")
     print(result.content)
     # result_dict= ast.literal_eval(result.content)
     # print('------------------------')

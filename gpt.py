@@ -7,6 +7,17 @@ import webbrowser
 import os
 from nlp import text_emotion
 from rag import my_vector_store
+import json
+import re
+
+
+def clean_and_parse_response(response_text):
+    # Remove 'json' keyword and clean up
+    match = re.search(r'\{.*\}', response_text, re.DOTALL)
+    if match:
+        clean_json = match.group()
+        return json.loads(clean_json)
+    return None
 
 # speaker for text to speech section
 speaker =None
@@ -40,8 +51,8 @@ def run_generate(query,user_emotion):
             print(score)
             context=resp.page_content
     response_total = generate_response(context,query,user_emotion=user_emotion)
-    response_given =response_total
-    st.write("Response:", response_given)
+    response_given =clean_and_parse_response(response_total)
+    st.write("Response:", response_given['DESCRIPTION'])
     Speak(response_given)
 
 

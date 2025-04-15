@@ -42,7 +42,7 @@ def run_generate(user_emotion):
     #     Speak(response_given)
     st.write("Generating response...")
     global previous_prompt, previous_response
-    response_total = generate_response(query,user_emotion=user_emotion,previous_prompt=previous_prompt, previous_response=previous_response)
+    response_total = generate_response(query,user_emotion=user_emotion)
     response_given =response_total['text']
     previous_prompt=query
     previous_response=response_given
